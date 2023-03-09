@@ -1,0 +1,377 @@
+@keyframes slideDown {
+  0% {
+    top: -50%;
+  }
+  60% {
+    top: 0;
+  }
+  100%{
+    top: -5px;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    top: -5px;
+  }
+  60% {
+    top: 0;
+  }
+  100%{
+    top: -50%;
+  }
+}
+
+.body {
+  margin: 0 auto;
+  padding: 0;
+
+  background-color: #f8f7f7;
+}
+
+.popup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  position: absolute;
+  top: -50%;
+  left: 50%;
+
+  width: 400px;
+
+  margin: 0;
+  padding: 20px 20px;
+
+  border: none;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  
+  background-color: #006d4d;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+
+  transform: translate(-50%, 0);
+
+  z-index: 3;
+}
+
+.popup.popup_onTest {
+  background-color: #f8f7f7;
+}
+
+.popup_show {
+  animation: slideDown 0.8s ease-in forwards;
+}
+
+.popup_hide {
+  animation: slideUp 0.8s ease-in forwards;
+}
+
+.popup__text {
+  margin: 0;
+  padding: 0;
+
+  width: 80%;
+
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.popup_onTest .popup__text {
+  color: #006d4d;
+}
+
+.popup__btn {
+  margin: 0;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+  border: none;
+  outline: none;
+
+  background-color: hsl(27, 92%, 62%);
+
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+
+  line-height: 15px;
+  text-align: center;
+
+  transition: all 0.1s ease-in;
+
+  cursor: pointer;
+}
+
+.popup__btn:hover, 
+.popup__btn:focus {
+  background-color: hsl(27, 92%, 50%);
+}
+
+
+
+
+
+
+
+
+
+.section {
+  display: block;
+
+  height: 95vh;
+  margin: 0 auto;
+}
+
+.section_hide {
+  display: none;
+}
+
+.width-wrapper {
+  width: 1185px;
+  margin: 0 auto;
+  /* position: relative; */
+}
+
+.section_1 {
+  position: relative;
+}
+
+.emailForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position:absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 500px;
+
+  margin: 0 auto;
+  padding: 20px;
+
+  border-radius: 10px;
+
+  background-color: #006d4d;
+
+  transform: translate(-50%, -50%);
+}
+
+.emailLabel {
+  color: white;
+
+  font-family: 'Nunito', sans-serif;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.emailInput {
+  width: 80%;
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  padding: 10px;
+
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+
+  outline: none;
+  border: none;
+  border-bottom: 3px solid  #f8f7f7;
+  background-color: transparent;
+
+  transition: all 0.3s ease-in-out;
+}
+
+.emailInput::placeholder {
+  color: white;
+  opacity: 0.5;
+}
+.emailInput::-webkit-input-placeholder {
+  color: white;
+  opacity: 0.5;
+}
+.emailInputt::-ms-input-placeholder {
+  color: white;
+  opacity: 0.5;
+}
+.emailInputt:-moz-placeholder {
+  color: white;
+  opacity: 0.5;
+}
+.emailInput::-moz-placeholder {
+  color: white;
+  opacity: 0.5;
+}
+.emailInput:-ms-input-placeholder {
+  color: white;
+  opacity: 0.5;
+}
+
+.emailInput:hover, 
+.emailInput:focus {
+  border-color:hsl(27, 92%, 62%)
+}
+
+.emailInput:read-only{
+  color: rgba(255, 255, 255, 0.6);
+  border-color:hsl(27, 92%, 62%)
+}
+
+.submitEmailBtn {
+  padding: 10px 60px;
+
+  border-radius: 10px;
+  border: none;
+  outline: none;
+
+  background-color: hsl(27, 92%, 62%);
+
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+
+  transition: all 0.1s ease-in;
+
+  cursor: pointer;
+}
+
+.submitEmailBtn:hover, 
+.submitEmailBtn:focus {
+  background-color: hsl(27, 92%, 50%);
+}
+
+.submitEmailBtn:disabled {
+  cursor:not-allowed;
+  background-color: hsl(27, 92%, 50%);
+}
+
+/* .submitEmailBtn:disabled:hover,
+.submitEmailBtn:disabled:focus {
+  background-color: hsl(27, 92%, 50%);
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.header-color {
+  background-color: #006d4d;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 0;
+  margin-bottom: 15px;
+  padding: 20px 0;
+}
+
+.studentEmail {
+  margin: 0;
+  padding: 0;
+
+  color: white;
+
+  font-family: 'Nunito', sans-serif;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.submitTestBtn {
+  padding: 20px;
+
+  border-radius: 10px;
+  border: none;
+  outline: none;
+
+  background-color: hsl(27, 92%, 62%);
+
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+
+  transition: all 0.1s ease-in;
+
+  cursor: pointer;
+}
+
+.submitTestBtn:hover, 
+.submitTestBtn:focus {
+  background-color: hsl(27, 92%, 50%);
+}
+
+.submitTestBtn:disabled {
+  cursor: not-allowed;
+  background-color: hsl(27, 92%, 50%);
+}
+
+/* .submitTestBtn:disabled:hover,
+.submitTestBtn:disabled:focus {
+  background-color: hsl(27, 92%, 50%);
+} */
+
+.tableTest {
+  width: 1185px;
+  height: 85vh;
+
+  border: 1px solid hsl(0, 7%, 80%);
+}
+
+.width-wrapper_forTable {
+  position: relative;
+}
+
+.tableBlock{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background-color: rgba(248, 247, 247, 0.2);
+  backdrop-filter: blur(1px);
+
+  transition: all 0.3s ease-in;
+  z-index: 2;
+  cursor: not-allowed;
+}
+
+.tableBlock_hide {
+  display: none;
+}
