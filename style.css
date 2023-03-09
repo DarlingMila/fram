@@ -348,8 +348,8 @@
 
 .tableTest {
   width: 1185px;
-  height: 85vh;
-
+  height: 80vh;
+  
   border: 1px solid hsl(0, 7%, 80%);
 }
 

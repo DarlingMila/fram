@@ -48,7 +48,7 @@ async function openTests (e) {
   const email = emailField.value.trim();
 
   submitEmailBtn.disabled = true;
-  submitEmailBtn.textContent = "Загружаем тест...";
+  submitEmailBtn.textContent = "Загружаем тесты...";
   emailField.readOnly = true;
 
   try {
@@ -72,6 +72,7 @@ async function openTests (e) {
     sessionStorage.setItem("listName", listName);
 
     setData(email, listName, url);
+    emailField.value = '';
 
   } catch (err) {
 
@@ -102,7 +103,6 @@ async function submitTest (e) {
 
   const listName = sessionStorage.getItem("listName");
   if (listName === 'Заключение') return exitTest();
-  alert('куку')
   
   toggleTableBlock();
   
