@@ -98,12 +98,12 @@
   color: white;
   font-family: 'Nunito', sans-serif;
   font-size: 15px;
-  font-weight: bold;
+  /* font-weight: bold; */
 
   line-height: 15px;
   text-align: center;
 
-  transition: all 0.1s ease-in;
+  transition: all 0.2s ease-in;
 
   cursor: pointer;
 }
@@ -111,6 +111,8 @@
 .popup__btn:hover, 
 .popup__btn:focus {
   background-color: hsl(27, 92%, 50%);
+
+  font-weight: bold;
 }
 
 
@@ -365,7 +367,7 @@
   bottom: 0;
 
   background-color: rgba(248, 247, 247, 0.2);
-  backdrop-filter: blur(1px);
+  backdrop-filter: blur(3px);
 
   transition: all 0.3s ease-in;
   z-index: 2;
@@ -374,4 +376,55 @@
 
 .tableBlock_hide {
   display: none;
+}
+
+
+
+@keyframes jumping {
+  0% {
+    background-color: hsl(27, 92%, 50%);
+    transform: translateY(150%);
+  }
+  100% {
+    background-color:hsl(27, 92%, 62%);
+    transform: translateY(50%);
+  }
+}
+
+.loader {
+  display: block;
+
+  margin: 280px auto;
+
+  width: fit-content;
+  height: fit-content;
+  
+  animation: rotate infinite 1.5s;
+  transform-origin: bottom center;
+
+  transition: all 0.2s ease-in;
+}
+
+.loader .dot {
+  display: inline-block;
+
+  margin: 0;
+  margin-right: 15px;
+  padding: 0;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+
+  animation: jumping 1.2s infinite alternate;
+}
+
+.loader .dot:last-child {
+  margin-right: 0;
+}
+
+.loader .dot:nth-child(2n) {
+  transform: translateY(150%);
+  animation: jumping 1s infinite alternate-reverse;
 }

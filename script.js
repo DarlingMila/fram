@@ -47,6 +47,8 @@ async function openTests (e) {
   const emailField = emailForm.querySelector("#email");
   const email = emailField.value.trim();
 
+  // alert(email);
+
   submitEmailBtn.disabled = true;
   submitEmailBtn.textContent = "Загружаем тесты...";
   emailField.readOnly = true;
@@ -57,12 +59,19 @@ async function openTests (e) {
 
     console.log("res", res);
 
+    // alert(`openTests 
+    // try
+    // res:
+    // ${res}`);
+
     // if (!res.includes("docs.google.com/spreadsheets")) {
     //   return showPopup(res);
     // }
 
     const data = res.split(",");
-    
+
+    // const url = `${data[0]}?rm=minimal&widget=true&headers=false`;
+    // &amp;
     const url = `${data[0]}?rm=minimal`;
     const listIndex = data[1];
     const listName = testsNames[listIndex];
@@ -72,12 +81,19 @@ async function openTests (e) {
     sessionStorage.setItem("listName", listName);
 
     setData(email, listName, url);
-    emailField.value = '';
+    emailField.value = "";
 
   } catch (err) {
 
-    console.log(err);
-    console.log(err.message);
+    // alert(`openTests 
+    // catch
+    // err:
+    // ${err}
+    // err.message:
+    // ${err.message}`);
+
+    // console.log(err);
+    // console.log(err.message);
     showPopup("Некорректный адрес электронной почты");
 
   } finally {
@@ -107,38 +123,69 @@ async function submitTest (e) {
   toggleTableBlock();
   
   const url = sessionStorage.getItem("url");
-  const newListName = testsNames[testsNames.indexOf(listName) + 1];
+  const email = sessionStorage.getItem("email");
+  // const newListName = testsNames[testsNames.indexOf(listName) + 1];
 
   submitTestBtn.disabled = true;
-  const btnText = getBtnText_onSubmit(listName)
-  submitTestBtn.textContent = btnText;
+  const btnText_onSubmit = getBtnText_onSubmit(listName)
+  submitTestBtn.textContent = btnText_onSubmit;
+
+  let newListName = null;
 
   try {
-    const response = await fetch(`${apiUrl}?url=${url}&listName=${listName}`, {
-      method: "POST",
-    });
+    const response = await fetch(
+      `${apiUrl}?url=${url}&listName=${listName}&email=${email}`,
+      {
+        method: "POST",
+      }
+    );
 
     const res = await response.text();
-    // console.log("res", res);
-    showPopup(res, true);
-    // alert('мы в try')
+
+    // alert(`submitTest 
+    // try
+    // res:
+    // ${res}`);
+
+    if (Number(res) >= 0, Number(res) <=24) {
+      newListName = testsNames[res];
+      sessionStorage.setItem("listName", newListName);
+    } else {
+      showPopup(res, true);
+    }
 
   } catch (err) {
 
-    console.log(err);
-    console.log(err.message);
+    // alert(`submitTest 
+    // catch
+    // err:
+    // ${err}
+    // err.message:
+    // ${err.message}`);
+
+    const btnText = getBtnText(listName);
+    // alert(`btnText ${btnText}`);
+    submitTestBtn.textContent = btnText;
+
+    // showPopup("Что-то пошло не так. Подождите и попробуйте снова.", true);
+
+    // console.log(err);
+    // console.log(err.message);
     // alert("Что-то пошло не так");
     // alert("мы в catch");
 
-    sessionStorage.setItem("listName", newListName);
+    // sessionStorage.setItem("listName", newListName);
 
   } finally {
     console.log("закончили");
 
     submitTestBtn.disabled = false;
-   
-    const btnText = getBtnText(newListName);
+
+    const btnText = newListName ? getBtnText(newListName) : getBtnText(listName);
     submitTestBtn.textContent = btnText;
+   
+    // const btnText = getBtnText(newListName);
+    // submitTestBtn.textContent = btnText;
     toggleTableBlock();
   }
 }
@@ -153,14 +200,13 @@ function checkSessionStorage() {
 }
 
 function setData(email, listName, url) {
-
-  toggleSctions();
   tableTest.src = url;
   studentEmail.textContent = email;
-
+  
   const btnText = getBtnText(listName);
-
+  
   submitTestBtn.textContent = btnText;
+  toggleSctions();
 }
 
 
