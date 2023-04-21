@@ -1,7 +1,34 @@
 const apiUrl =
   "https://script.google.com/macros/s/AKfycbxd2xduI-ZenJvVTOC9eT-EIZjfzxMTS9jzoHoUjIdOV8Rof-5EXs85SpGYG22HJaQJ/exec";
 
-const testsNames = ['Введение', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', 'Колесо баланса', 'Колесо: результат', 'Заключение'];
+const testsNames = [
+  "Введение",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "Колесо баланса",
+  "Колесо: результат",
+  "Заключение",
+];
 
 const sections = document.querySelectorAll(".section");
 const emailForm = document.querySelector("#emailForm");
@@ -43,6 +70,8 @@ function toggleSctions() {
 
 async function openTests (e) {
   e.preventDefault();
+
+  if (popup.classList.contains("popup_show")) closePopup();
 
   const emailField = emailForm.querySelector("#email");
   const email = emailField.value.trim();
@@ -147,8 +176,8 @@ async function submitTest (e) {
     // res:
     // ${res}`);
 
-    if (Number(res) >= 0, Number(res) <=24) {
-      newListName = testsNames[res];
+    if (Number(res) >= 0 && Number(res) <= 25) { // было (Number(res) >= 0, Number(res) <=24)
+      newListName = res == "Заключение" ? "Заключение" : testsNames[res];
       sessionStorage.setItem("listName", newListName);
     } else {
       showPopup(res, true);

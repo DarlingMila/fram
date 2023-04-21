@@ -315,6 +315,8 @@
 }
 
 .submitTestBtn {
+  width: 290px;
+
   padding: 20px;
 
   border-radius: 10px;
