@@ -38,11 +38,12 @@ const studentEmail = document.querySelector(".studentEmail");
 const submitEmailBtn = document.querySelector(".submitEmailBtn");
 const submitTestBtn = document.querySelector(".submitTestBtn");
 
-const popup = document.querySelector('.popup');
+const popup = document.querySelector(".popup");
 const popupBtn = document.querySelector(".popup__btn");
 const popupText = document.querySelector(".popup__text");
 
 const tableBlock = document.querySelector(".tableBlock");
+const progress = document.querySelector(".progress");
 
 function closePopup() {
   popup.classList.remove("popup_show");
@@ -98,6 +99,7 @@ async function openTests (e) {
     // }
 
     const data = res.split(",");
+    console.log(data)
 
     // const url = `${data[0]}?rm=minimal&widget=true&headers=false`;
     // &amp;
@@ -105,9 +107,15 @@ async function openTests (e) {
     const listIndex = data[1];
     const listName = testsNames[listIndex];
 
+    const amountOfTests = data[2];
+
+
     sessionStorage.setItem("email", email);
     sessionStorage.setItem("url", url);
     sessionStorage.setItem("listName", listName);
+
+    sessionStorage.setItem("listIndex", listIndex);
+    sessionStorage.setItem("amountOfTests", amountOfTests);
 
     setData(email, listName, url);
     emailField.value = "";
@@ -179,6 +187,8 @@ async function submitTest (e) {
     if (Number(res) >= 0 && Number(res) <= 25) { // было (Number(res) >= 0, Number(res) <=24)
       newListName = res == "Заключение" ? "Заключение" : testsNames[res];
       sessionStorage.setItem("listName", newListName);
+      sessionStorage.setItem("listIndex", Number(res));
+      setProgress();
     } else {
       showPopup(res, true);
     }
@@ -224,18 +234,36 @@ function checkSessionStorage() {
   const url = sessionStorage.getItem("url");
   const email = sessionStorage.getItem("email");
   const listName = sessionStorage.getItem("listName");
+  const listIndex = sessionStorage.getItem("listIndex");
+  const amountOfTests = sessionStorage.getItem("amountOfTests");
 
-  if (Boolean(url) && Boolean(email) && Boolean(listName)) setData(email, listName, url);
+  if (
+    Boolean(url) &&
+    Boolean(email) &&
+    Boolean(listName) &&
+    Boolean(listIndex) &&
+    Boolean(amountOfTests)
+  )
+    setData(email, listName, url);
 }
 
 function setData(email, listName, url) {
   tableTest.src = url;
   studentEmail.textContent = email;
-  
+
   const btnText = getBtnText(listName);
-  
   submitTestBtn.textContent = btnText;
+
+  setProgress();
   toggleSctions();
+}
+
+function setProgress() {
+  const listIndex = sessionStorage.getItem("listIndex");
+  const amountOfTests = sessionStorage.getItem("amountOfTests");
+
+  const width = amountOfTests == 0 ? 100 : (listIndex * 100) / amountOfTests;
+  progress.style.width = `${width}%`;
 }
 
 
