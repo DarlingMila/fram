@@ -1,37 +1,58 @@
 const apiUrl =
   "https://script.google.com/macros/s/AKfycbxd2xduI-ZenJvVTOC9eT-EIZjfzxMTS9jzoHoUjIdOV8Rof-5EXs85SpGYG22HJaQJ/exec";
 
-const testsNames = [
-  "Введение",
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "11",
-  "12",
-  "13",
-  "14",
-  "15",
-  "16",
-  "17",
-  "18",
-  "19",
-  "20",
-  "21",
-  "22",
-  "23",
-  "24",
-  "25",
-  "Колесо баланса",
-  "Колесо: результат",
-  "Заключение",
-];
+const numberOfTests = 25; //количестов тестов без Колеса (только номерные тесты). ---при необходимости изменить
+
+let testsNames = [];
+
+for (let i = 0; i <= numberOfTests; i++) {
+  switch (i) {
+    case 0:
+      testsNames.push(["Введение"]);
+      break;
+    case numberOfTests:
+      testsNames.push([String(i)], ["Колесо баланса"], ["Колесо: результат"], ["Заключение"]);
+      testsNames = testsNames.flat();
+      break;
+    default:
+      testsNames.push([String(i)]);
+      break;
+  }
+}
+
+console.log(testsNames);
+
+// const testsNames = [
+//   "Введение",
+//   "1",
+//   "2",
+//   "3",
+//   "4",
+//   "5",
+//   "6",
+//   "7",
+//   "8",
+//   "9",
+//   "10",
+//   "11",
+//   "12",
+//   "13",
+//   "14",
+//   "15",
+//   "16",
+//   "17",
+//   "18",
+//   "19",
+//   "20",
+//   "21",
+//   "22",
+//   "23",
+//   "24",
+//   "25",
+//   "Колесо баланса",
+//   "Колесо: результат", - при 25 тестах это будет 27 всего тестов те КР будет вся полоска прогресса закрашена
+//   "Заключение",
+// ];
 
 const sections = document.querySelectorAll(".section");
 const emailForm = document.querySelector("#emailForm");
@@ -187,7 +208,7 @@ async function submitTest (e) {
     // res:
     // ${res}`);
 
-    if (Number(res) >= 0 && Number(res) <= 25) { // было (Number(res) >= 0, Number(res) <=24)
+    if (Number(res) >= 0 && Number(res) <= testsNames.length) {
       newListName = res == "Заключение" ? "Заключение" : testsNames[res];
       sessionStorage.setItem("listName", newListName);
       sessionStorage.setItem("listIndex", Number(res));
