@@ -2,20 +2,25 @@ const apiUrl =
   "https://script.google.com/macros/s/AKfycbxd2xduI-ZenJvVTOC9eT-EIZjfzxMTS9jzoHoUjIdOV8Rof-5EXs85SpGYG22HJaQJ/exec";
 
 const numberOfTests = 25; //количестов тестов без Колеса (только номерные тесты). ---при необходимости изменить
+const numberOfExercises = 3; //количестов упражнений. ---при необходимости изменить
 
 let testsNames = [];
 
-for (let i = 0; i <= numberOfTests; i++) {
+for (let i = 0; i <= numberOfTests + numberOfExercises; i++) {
   switch (i) {
     case 0:
       testsNames.push(["Введение"]);
       break;
-    case numberOfTests:
-      testsNames.push([String(i)], ["Колесо баланса"], ["Колесо: результат"], ["Заключение"]);
+    case numberOfTests + numberOfExercises:
+      testsNames.push([`У${i - numberOfTests}`], ["Колесо баланса"], ["Колесо: результат"], ["Заключение"]);
       testsNames = testsNames.flat();
       break;
     default:
-      testsNames.push([String(i)]);
+      if (i <= numberOfTests) {
+        testsNames.push([String(i)]);
+      } else {
+        testsNames.push([`У${i - numberOfTests}`]);
+      }
       break;
   }
 }
@@ -129,7 +134,8 @@ async function openTests (e) {
     // &amp;
     const url = `${data[0]}?rm=minimal`;
     const listIndex = data[1];
-    const listName = testsNames[listIndex];
+    let listName = testsNames[listIndex];
+    listName = listName > numberOfTests ? `У${nextTest - numberOfTests}` : listName;
 
     const amountOfTests = data[2];
 
