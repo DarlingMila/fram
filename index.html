@@ -12,11 +12,29 @@
 </head>
 <body class="body">
 
+  <!-- Попап с ошибками -->
   <div class="popup">
     <p class="popup__text">Заглушка</p>
     <button class="popup__btn">&#10006;</button>
   </div>
 
+  <!-- Окно с инструкцией, также имеет подложку блокатор -->
+  <div class="instructionModal instructionModal_hide">
+
+    <div class="instructionModal__frame">
+
+      <div class="instructionModal__headerWrapper">
+        <h3 class="instructionModal__title">Инструкция!</h3>
+        <button class="instructionModal__btn">&#10006;</button>
+      </div>
+
+      <div class="instructionModal__text">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 1 блок: вход в тестирование -->
   <section class="section section_1">
 
     <form class="emailForm" id="emailForm">
@@ -27,6 +45,7 @@
 
   </section>
 
+  <!-- 2 блок: тест -->
   <section class="section section_2 section_hide">
 
     <div class="header-color">
@@ -34,6 +53,7 @@
       <div class="width-wrapper">
         <div class="header">
           <h3 class="studentEmail">Почта</h3>
+          <button class="instrBtn instrBtn_hide">?</button>
           <button class="submitTestBtn">Отправить результаты</button>
         </div>
       </div>
@@ -46,6 +66,8 @@
 
     <div class="width-wrapper width-wrapper_forTable">
       <div class="tableBlock tableBlock_hide">
+        
+        <!-- загрузка -->
         <div class="loader">
           <div class="dot"></div>
           <div class="dot"></div>
@@ -53,6 +75,7 @@
           <div class="dot"></div>
           <div class="dot"></div>
         </div>
+
       </div>
       <iframe class="tableTest" src=""></iframe>
     </div>

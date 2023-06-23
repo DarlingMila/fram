@@ -1,3 +1,4 @@
+/* анимация для показа попапа */
 @keyframes slideDown {
   0% {
     top: -50%;
@@ -10,6 +11,7 @@
   }
 }
 
+/* анимация для сокрытия попапа */
 @keyframes slideUp {
   0% {
     top: -5px;
@@ -22,12 +24,67 @@
   }
 }
 
+/* анимация для одноразовой подсветки кнопки, вызывающей окно с инструкцией  */
+@keyframes btnGlow {
+  0% {
+   border-color: #006d4d;
+  }
+  50% {
+   border-color: hsl(27, 92%, 50%);
+  }
+  100%{
+    border-color:#006d4d;
+  }
+}
+
+/* анимация для загрузки  */
+@keyframes jumping {
+  0% {
+    background-color: hsl(27, 92%, 50%);
+    transform: translateY(150%);
+  }
+  100% {
+    background-color:hsl(27, 92%, 62%);
+    transform: translateY(50%);
+  }
+}
+
+
+
+
+
+/* --------------- body --------------- */
+
 .body {
   margin: 0 auto;
   padding: 0;
 
   background-color: #f8f7f7;
 }
+
+.section {
+  display: block;
+
+  height: 95vh;
+  margin: 0 auto;
+}
+
+.section_hide {
+  display: none;
+}
+
+.width-wrapper {
+  width: 1185px;
+  margin: 0 auto;
+}
+
+.section_1 {
+  position: relative;
+}
+
+/* --------------- body --------------- */
+
+/* --------------- popup --------------- */
 
 .popup {
   display: flex;
@@ -115,34 +172,130 @@
   font-weight: bold;
 }
 
+/* --------------- popup --------------- */
 
+/* --------------- instructionModal --------------- */
 
-
-
-
-
-
-
-.section {
-  display: block;
-
-  height: 95vh;
-  margin: 0 auto;
-}
-
-.section_hide {
+.instructionModal {
   display: none;
-}
 
-.width-wrapper {
-  width: 1185px;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
   margin: 0 auto;
-  /* position: relative; */
+
+  background-color: rgba(248, 247, 247, 0.2);
+  backdrop-filter: blur(3px);
+
+  transition: all 0.3s ease-in;
+
+  opacity: 1;
+  z-index: 5;
 }
 
-.section_1 {
-  position: relative;
+.instructionModal__frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 70%;
+
+  margin: 0 auto;
+  padding: 0;
+
+  background-color: #f8f7f7;
+  
+  border: 2px solid #006d4d;
+  border-radius: 10px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+  
+  transform: translate(-50%, -50%);
+
+  transition: all 0.1s ease-in;
+  opacity: 1;
+
+  overflow: hidden;
 }
+
+.instructionModal_hide > .instructionModal__frame {
+  opacity: 0;
+}
+
+.instructionModal__headerWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: #006d4d;
+
+  padding: 10px 20px;
+}
+
+.instructionModal__title {
+  margin: 0;
+  padding: 0;
+
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.instructionModal__text {
+  margin: 0;
+  padding: 10px 20px;
+}
+
+.instructionModal__heading, .instructionModal__par  {
+  margin: 5px 0;
+  padding: 0;
+
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+}
+
+.instructionModal__heading {
+  margin-bottom: 10px;
+}
+
+.instructionModal__btn{
+  margin: 0;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+  border: none;
+  outline: none;
+
+  background-color: hsl(27, 92%, 62%);
+
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+
+  line-height: 15px;
+  text-align: center;
+
+  transition: all 0.2s ease-in;
+
+  cursor: pointer;
+}
+
+.instructionModal__btn:hover, 
+.instructionModal__btn:focus {
+  background-color: hsl(27, 92%, 50%);
+
+  font-weight: bold;
+}
+
+/* --------------- instructionModal --------------- */
+
+/* --------------- emailForm --------------- */
 
 .emailForm {
   display: flex;
@@ -256,38 +409,9 @@
   background-color: hsl(27, 92%, 50%);
 }
 
-/* .submitEmailBtn:disabled:hover,
-.submitEmailBtn:disabled:focus {
-  background-color: hsl(27, 92%, 50%);
-} */
+/* --------------- emailForm --------------- */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* --------------- header --------------- */
 
 .header-color {
   background-color: #006d4d;
@@ -312,6 +436,56 @@
   font-family: 'Nunito', sans-serif;
   font-weight: bold;
   font-size: 25px;
+}
+
+.instrBtn{
+  margin: 0;
+  margin-right: 20px;
+  margin-left: auto;
+
+  padding: 0;
+
+  width: 45px;
+  height: 45px;
+
+  border-radius: 50%;
+  border: 5px solid #006d4d;
+  outline: none;
+
+  background-color: hsl(27, 92%, 62%);
+
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+
+  line-height: 20px;
+  text-align: center;
+  vertical-align: middle;
+
+  transition: all 0.2s ease-in;
+
+  cursor: pointer;
+}
+
+.instrBtn_hide {
+  display: none;
+}
+
+.instrBtn_animation {
+  animation: btnGlow 1.5s ease-in forwards 0.2s;
+}
+
+.instrBtn:hover, 
+.instrBtn:focus {
+  background-color: hsl(27, 92%, 50%);
+  font-size: 25px;
+}
+
+.instrBtn:disabled {
+  font-size: 20px;
+  cursor:not-allowed;
+  background-color: hsl(27, 92%, 50%);
 }
 
 .submitTestBtn {
@@ -345,10 +519,9 @@
   background-color: hsl(27, 92%, 50%);
 }
 
-/* .submitTestBtn:disabled:hover,
-.submitTestBtn:disabled:focus {
-  background-color: hsl(27, 92%, 50%);
-} */
+/* --------------- header --------------- */
+
+/* ----------- tableTest ----------- */
 
 .tableTest {
   width: 1185px;
@@ -380,18 +553,9 @@
   display: none;
 }
 
+/* ----------- tableTest ----------- */
 
-
-@keyframes jumping {
-  0% {
-    background-color: hsl(27, 92%, 50%);
-    transform: translateY(150%);
-  }
-  100% {
-    background-color:hsl(27, 92%, 62%);
-    transform: translateY(50%);
-  }
-}
+/* ----------- loader ----------- */
 
 .loader {
   display: block;
@@ -431,6 +595,7 @@
   animation: jumping 1s infinite alternate-reverse;
 }
 
+/* ----------- loader ----------- */
 
 /* ----------- progress ----------- */
 
