@@ -60,9 +60,16 @@ for (let i = 0; i <= numberOfTests + numberOfExercises; i++) {
 console.log(testsNames); // пока оставила, чтобы всегда была возможность отследить их до начала работы
 
 const sections = document.querySelectorAll(".section");
-const emailForm = document.querySelector("#emailForm");
 const tableTest = document.querySelector(".tableTest");
+
+const headerBlocks = document.querySelectorAll(".selectEnterInput");
+const emailForm = document.querySelector("#emailForm");
 const studentEmail = document.querySelector(".studentEmail");
+const additionalInfoBlock = emailForm.querySelector(".emailForm__otherInfoWrapper");
+
+const radioBtns = document.querySelectorAll("input[type=radio]");
+const ageField = document.querySelector("input[name=age]");
+const emailField = emailForm.querySelector("#email");
 
 const submitEmailBtn = document.querySelector(".submitEmailBtn");
 const submitTestBtn = document.querySelector(".submitTestBtn");
@@ -79,6 +86,23 @@ const instrCloseBtn = instructionModal.querySelector(".instructionModal__btn");
 const instrTextBlock = instructionModal.querySelector(".instructionModal__text");
 const instrOpenBtn = document.querySelector(".instrBtn");
 
+/**
+ * Функция переключения между блоками входа
+ * @param {string} isFirstTime строка true/false открыт ли блок "В первый раз?"
+ */
+function changeEnterBlock(isFirstTime) {
+
+  /**
+   * Проверка: открыт блок "В первый раз?"
+   *    если да -> в окне добавляются блок с радиокнопками для выбора пола и инпут для возраста
+   *    если нет -> скрываются блок с дополнительными вопросами
+   */
+  if (isFirstTime === "true") {
+    additionalInfoBlock.classList.remove("emailForm__otherInfoWrapper_hide");
+  } else {
+    additionalInfoBlock.classList.add("emailForm__otherInfoWrapper_hide");
+  }
+}
 
 /**
  * Функция закрывает попап с ошибкой, меняя классы с анимацией
@@ -212,10 +236,73 @@ function createAndInsertText(element, className, text) {
   return item;
 }
 
+/**
+ * Функция собирает данные и выстраивает строку запроса
+ * @returns string строка запроса для GET
+ */
+function getData() {
+  /**
+   * При успешном сборе данных формируется строка запроса
+   * Если какие-то поля не были заполнены, выскакивает ошибка
+   */
+  try {
+    let string = "";
+
+    const isFirstTime = document.querySelector("input[name=isFirstTime]:checked").value;
+    const email = emailField.value.trim();
+
+    string += `isFirstTime=${isFirstTime}&email=${email}`;
+
+    /**
+     * Проверка: открыт ли блок "В первый раз?"
+     *    если да -> строка дополняется информацие по возрасту и полу
+     */
+    if (isFirstTime === "true") {
+      const gender = document.querySelector("input[name=gender]:checked").value;
+      const age = ageField.value.trim();
+
+      string += `&gender=${gender}&age=${age}`;
+    }
+
+    return [email, string];
+
+  } catch {
+    showPopup("Убедитесь, что все поля заполнены.");
+  }
+}
+
+/**
+ * Функция блокировки кнопок и полей
+ */
+function blockInputsAndBtns() {
+  submitEmailBtn.disabled = true;
+  submitEmailBtn.textContent = "Загружаем тесты...";
+  emailField.readOnly = true;
+  ageField.readOnly = true;
+
+  radioBtns.forEach((btn) => {
+    btn.disabled = true;
+  });
+}
+
+/**
+ * Функция снятия блокировок с кнопок и полей
+ */
+function unblockInputsAndBtns() {
+  submitEmailBtn.disabled = false;
+  submitEmailBtn.textContent = "Подтвердить";
+  emailField.readOnly = false;
+  ageField.readOnly = false;
+
+  radioBtns.forEach((btn) => {
+    btn.disabled = false;
+  });
+}
+
 
 
 /**
- * Асинхронная функция посылающая GET запрос: отправляет почту и получает данные, необходимые для тестирования
+ * Асинхронная функция посылающая GET запрос: отправляет почту и получает данные, необходимые для тестирования (вход в тестирование)
  * @param {object} e - событие 
  */
 async function openTests (e) {
@@ -224,12 +311,8 @@ async function openTests (e) {
   // принудительное закрытие попапа, если он открыт
   if (popup.classList.contains("popup_show")) closePopup();
 
-  const emailField = emailForm.querySelector("#email");
-  const email = emailField.value.trim();
-
-  submitEmailBtn.disabled = true;
-  submitEmailBtn.textContent = "Загружаем тесты...";
-  emailField.readOnly = true;
+  const [email, studentData] = getData();
+  blockInputsAndBtns(); 
 
   /**
    * При успешной отправки данных открывается тестирование, необходимый данные записываются в sessionStorage
@@ -237,37 +320,44 @@ async function openTests (e) {
    * В последнем блоке элементы возвращаются в прежнее состояния
    */
   try {
-    const response = await fetch(`${apiUrl}?email=${email}`);
+    const response = await fetch(`${apiUrl}?${studentData}`);
     const res = await response.text();
 
     const data = res.split(",");
 
-    const url = `${data[0]}?rm=minimal`; //так таблица отображается без шапка
+    /**
+     * Проверка: в ответе содержится ссылка на таблицу
+     *    если да -> открывается тестирование, сохраняются необходимые данные
+     *    если нет -> появляется попап с ошибкой, переданной с сервера
+     */
+    if (data[0].includes("docs.google.com/spreadsheets")) {
+      const url = `${data[0]}?rm=minimal`; //так таблица отображается без шапки
 
-    const listIndex = data[1];
-    const listName = testsNames[listIndex];
+      const listIndex = data[1];
+      const listName = testsNames[listIndex];
 
-    const amountOfTests = data[2];
+      const amountOfTests = data[2];
 
-    //ниже все необходимые данные записываются в sessionStorage
-    sessionStorage.setItem("email", email);
-    sessionStorage.setItem("url", url);
-    sessionStorage.setItem("listName", listName);
-    sessionStorage.setItem("listIndex", listIndex);
-    sessionStorage.setItem("amountOfTests", amountOfTests);
+      //ниже все необходимые данные записываются в sessionStorage
+      sessionStorage.setItem("email", email);
+      sessionStorage.setItem("url", url);
+      sessionStorage.setItem("listName", listName);
+      sessionStorage.setItem("listIndex", listIndex);
+      sessionStorage.setItem("amountOfTests", amountOfTests);
 
-    setData(email, listName, url);
-    emailField.value = "";
+      setData(email, listName, url);
+      emailField.value = "";
 
-    checkForInstructions(listName);
-    
+      checkForInstructions(listName);
+    } else {
+      showPopup(res);
+    }
+
   } catch (err) {
-    showPopup("Некорректный адрес электронной почты");
+    showPopup("Некорректный адрес электронной почты.");
 
   } finally {
-    submitEmailBtn.disabled = false;
-    submitEmailBtn.textContent = "Подтвердить";
-    emailField.readOnly = false;
+    unblockInputsAndBtns();
   }
 };
 
@@ -461,6 +551,10 @@ function getBtnText_onSubmit(listName) {
 }
 
 
+
+headerBlocks.forEach((block) => {
+  block.addEventListener("click", (e) => changeEnterBlock(e.target.value));
+});
 
 submitTestBtn.addEventListener("click", submitTest);
 emailForm.addEventListener("submit", openTests);

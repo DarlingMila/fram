@@ -95,7 +95,7 @@
   top: -50%;
   left: 50%;
 
-  width: 400px;
+  width: 500px;
 
   margin: 0;
   padding: 20px 20px;
@@ -128,7 +128,7 @@
   margin: 0;
   padding: 0;
 
-  width: 80%;
+  width: 85%;
 
   color: white;
   font-family: 'Nunito', sans-serif;
@@ -295,6 +295,75 @@
 
 /* --------------- instructionModal --------------- */
 
+/* --------------- windowWrapper --------------- */
+
+.windowWrapper {
+  position:absolute;
+  top: 30%;
+  left: 50%;
+
+  width: 500px;
+  transform: translate(-50%, 0);
+}
+
+.selectEnter {
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectEnterInput {
+  display: none;
+}
+
+.selectEnterLabel {
+  display: inline-block;
+
+  width: 240px;
+
+  margin: 0;
+  padding: 5px 0;
+
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+
+  background-color: #96afa7;
+
+  color: white;
+
+  font-family: 'Nunito', sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+
+  text-align: center;
+
+  transition: all 0.1s ease-in-out;
+
+  cursor: pointer;
+}
+
+.selectEnterInput:checked + .selectEnterLabel {
+  background-color: #006d4d;
+}
+
+.selectEnterLabel:hover,
+.selectEnterLabel:focus {
+  background-color: #08533c;
+}
+
+.selectEnterInput:disabled + .selectEnterLabel {
+  cursor:not-allowed;
+}
+
+.selectEnterInput:disabled + .selectEnterLabel {
+  background-color: #96afa7;
+}
+
+.selectEnterInput:disabled:checked + .selectEnterLabel {
+  background-color:  #006d4d;
+}
+
+/* --------------- windowWrapper --------------- */
+
 /* --------------- emailForm --------------- */
 
 .emailForm {
@@ -302,20 +371,13 @@
   flex-direction: column;
   align-items: center;
 
-  position:absolute;
-  top: 50%;
-  left: 50%;
-
-  width: 500px;
-
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px;
 
-  border-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 
   background-color: #006d4d;
-
-  transform: translate(-50%, -50%);
 }
 
 .emailLabel {
@@ -372,13 +434,170 @@
 
 .emailInput:hover, 
 .emailInput:focus {
-  border-color:hsl(27, 92%, 62%)
+  border-color:hsl(27, 92%, 62%);
 }
 
 .emailInput:read-only{
   color: rgba(255, 255, 255, 0.6);
-  border-color:hsl(27, 92%, 62%)
+  border-color:hsl(27, 92%, 62%);
 }
+
+.emailForm__otherInfoWrapper {
+  display: flex;
+  justify-content: space-between;
+
+  width: 80%;
+  
+  margin: 0;
+  margin-bottom: 50px;
+}
+
+.emailForm__otherInfoWrapper_hide {
+  display: none;
+}
+
+/* --------------- infoWrapper --------------- */
+
+.infoWrapper > p {
+  margin: 0;
+  margin-bottom: 10px;
+
+  color: white;
+
+  font-family: 'Nunito', sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.infoWrapper_age {
+  width: 40%;
+}
+
+.genderLabel {
+  display: inline-block;
+
+  margin: 0;
+  margin-right: 10px;
+
+  width: 30px;
+  height: 30px;
+
+  border: 2px solid white;
+  border-radius: 6px;
+
+  color: white;
+
+  font-family: 'Nunito', sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+
+  text-align: center;
+  vertical-align: middle;
+
+  opacity: 0.5;
+
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+}
+
+.genderLabel:last-child {
+  margin-right: 0;
+}
+
+input[name='gender'] {
+  display: none;
+}
+
+input[name='gender']:checked +.genderLabel {
+  opacity: 1;
+}
+
+.genderLabel:hover, 
+.genderLabel:focus {
+  opacity: 1;
+  color:hsl(27, 92%, 62%);
+  border-color:hsl(27, 92%, 62%);
+}
+
+input[name='gender']:disabled + .genderLabel {
+  cursor:not-allowed;
+}
+
+input[name='gender']:disabled + .genderLabel:hover, 
+input[name='gender']:disabled +.genderLabel:focus {
+  opacity: 0.5;
+  color: white;
+  border-color :white;
+}
+
+input[name='gender']:disabled:checked + .genderLabel {
+  opacity: 1;
+  color: hsl(27, 92%, 62%);
+  border-color :hsl(27, 92%, 62%);
+}
+
+input[name='gender']:disabled:checked + .genderLabel:hover, 
+input[name='gender']:disabled:checked +.genderLabel:focus {
+  opacity: 1;
+  color: hsl(27, 92%, 62%);
+  border-color :hsl(27, 92%, 62%);
+}
+
+.ageInput {
+  width: 100%;
+
+  margin: 0;
+  padding: 5px;
+  padding-top: 0;
+
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+
+  outline: none;
+  border: none;
+  border-bottom: 3px solid  #f8f7f7;
+  background-color: transparent;
+
+  transition: all 0.3s ease-in-out;
+}
+
+.ageInput::placeholder {
+  color: white;
+  opacity: 0.5;
+}
+.ageInput::-webkit-input-placeholder {
+  color: white;
+  opacity: 0.5;
+}
+.ageInput::-ms-input-placeholder {
+  color: white;
+  opacity: 0.5;
+}
+.ageInput:-moz-placeholder {
+  color: white;
+  opacity: 0.5;
+}
+.ageInput::-moz-placeholder {
+  color: white;
+  opacity: 0.5;
+}
+.ageInput:-ms-input-placeholder {
+  color: white;
+  opacity: 0.5;
+}
+
+.ageInput:hover, 
+.ageInput:focus {
+  border-color:hsl(27, 92%, 62%);
+}
+
+.ageInput:read-only{
+  color: rgba(255, 255, 255, 0.6);
+  border-color:hsl(27, 92%, 62%);
+}
+
+/* --------------- infoWrapper --------------- */
 
 .submitEmailBtn {
   padding: 10px 60px;

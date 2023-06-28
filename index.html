@@ -37,11 +37,46 @@
   <!-- 1 блок: вход в тестирование -->
   <section class="section section_1">
 
-    <form class="emailForm" id="emailForm">
-      <label class="emailLabel" for="email">Введите свою почту:</label>
-      <input class="emailInput" type="text" name="email" id="email" placeholder="ivanov@mail.ru" autocomplete="off">
-      <button class="submitEmailBtn" type="submit">Подтвердить</button>
-    </form>
+    <div class="windowWrapper">
+
+      <div class="selectEnter">
+        <div class="selectEnter__block">
+          <input class="selectEnterInput" type="radio" id="true" name="isFirstTime" value="true">
+          <label class="selectEnterLabel" for="true">Первый раз?</label>
+        </div>
+
+        <div class="selectEnter__block">
+          <input class="selectEnterInput" type="radio" id="false" name="isFirstTime" value="false" checked>
+          <label class="selectEnterLabel" for="false">Вход</label>
+        </div>
+      </div>
+
+      <form class="emailForm" id="emailForm">
+        <label class="emailLabel" for="email">Введите свою почту:</label>
+        <input class="emailInput" type="text" name="email" id="email" placeholder="ivanov@mail.ru" autocomplete="off">
+
+        <div class="emailForm__otherInfoWrapper emailForm__otherInfoWrapper_hide">
+          <div class="infoWrapper infoWrapper_gender">
+            <p>Пол:</p>
+
+            <input type="radio" id="m" name="gender" value="m">
+            <label class="genderLabel" for="m">М</label>
+
+            <input type="radio" id="f" name="gender" value="f">
+            <label class="genderLabel" for="f">Ж</label>
+          </div>
+
+          <div class="infoWrapper infoWrapper_age">
+            <p>Полных лет:</p>
+
+            <input class="ageInput" type="number" id="age" name="age" maxlength="2" placeholder="18">
+          </div>
+        </div>
+
+        <button class="submitEmailBtn" type="submit">Подтвердить</button>
+      </form>
+
+    </div>
 
   </section>
 
