@@ -299,6 +299,22 @@ function unblockInputsAndBtns() {
   });
 }
 
+/**
+ * Функция очищает инпуты и откывает окно "Вход"
+ */
+function clearInputsAndRadioBtns() {
+  emailField.value = "";
+  ageField.value = "";
+  additionalInfoBlock.classList.add("emailForm__otherInfoWrapper_hide");
+  radioBtns.forEach((btn) => {
+    if (btn.name === "isFirstTime" && btn.value === "false") {
+      btn.checked = true;
+    } else {
+      btn.checked = false;
+    }
+  });
+}
+
 
 
 /**
@@ -346,9 +362,9 @@ async function openTests (e) {
       sessionStorage.setItem("amountOfTests", amountOfTests);
 
       setData(email, listName, url);
-      emailField.value = "";
-
+      clearInputsAndRadioBtns();
       checkForInstructions(listName);
+
     } else {
       showPopup(res);
     }
@@ -362,7 +378,7 @@ async function openTests (e) {
 };
 
 /**
- * Асинхронная функция посылающая POST запрос: отправляет почту и получает данные, необходимые для тестирования
+ * Асинхронная функция посылающая POST запрос: отправляет почту и получает данные, необходимые для тестирования (переключение тестов)
  * @param {object} e - событие 
  */
 async function submitTest (e) {
