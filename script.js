@@ -1,7 +1,7 @@
 const apiUrl =
   "https://script.google.com/macros/s/AKfycbxd2xduI-ZenJvVTOC9eT-EIZjfzxMTS9jzoHoUjIdOV8Rof-5EXs85SpGYG22HJaQJ/exec";
 
-const numberOfTests = 26; //количестов тестов без Колеса (только номерные тесты). ---при необходимости изменить
+const numberOfTests = 27; //количестов тестов без Колеса (только номерные тесты). ---при необходимости изменить
 const numberOfExercises = 3; //количестов упражнений. ---при необходимости изменить
 
 // ключи - название упражнений, далее массив с правилами. В массиве строки/абзацы - это элементы массива
