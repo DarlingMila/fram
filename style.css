@@ -49,6 +49,16 @@
   }
 }
 
+/* анимация для загрузки  */
+@keyframes highlight {
+  0% {
+    color: hsl(27, 92%, 50%);
+  }
+  100% {
+    color: white;
+  }
+}
+
 
 
 
@@ -657,7 +667,27 @@ input[name='gender']:disabled:checked +.genderLabel:focus {
   font-size: 25px;
 }
 
-.instrBtn{
+.timer {
+  margin: 0 auto;
+
+  padding: 0;
+
+  color: white;
+
+  font-family: 'Nunito', sans-serif;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.timer_highlight {
+  animation: highlight 1s ease-in infinite alternate;
+}
+
+.timer_hide {
+  display: none;
+}
+
+.instrBtn {
   margin: 0;
   margin-right: 20px;
   margin-left: auto;
@@ -685,6 +715,11 @@ input[name='gender']:disabled:checked +.genderLabel:focus {
   transition: all 0.2s ease-in;
 
   cursor: pointer;
+}
+
+.instrBtn_withTimer {
+  margin: 0;
+  margin-right: 20px;
 }
 
 .instrBtn_hide {

@@ -1,63 +1,36 @@
 const apiUrl =
   "https://script.google.com/macros/s/AKfycbxd2xduI-ZenJvVTOC9eT-EIZjfzxMTS9jzoHoUjIdOV8Rof-5EXs85SpGYG22HJaQJ/exec";
 
-const numberOfTests = 27; //количестов тестов без Колеса (только номерные тесты). ---при необходимости изменить
+const numberOfTests = 28; //количестов тестов без Колеса (только номерные тесты). ---при необходимости изменить
 const numberOfExercises = 3; //количестов упражнений. ---при необходимости изменить
 
 // ключи - название упражнений, далее массив с правилами. В массиве строки/абзацы - это элементы массива
 const exerciseInstructions = {
-  "У1": [
+  У1: [
     "Упражнение 'Быть-Делать-Иметь'",
-    "Надо делать вот так -- 1",
-    "Так не надо делать -- 1",
-    "И третий блок для теста! -- 1",
+    "Необходимо заполнить минимум 15 строк",
   ],
-  "У2": [
+  У2: [
     "Упражнение 'Опыт'",
-    "Надо делать вот так -- 2",
-    "Так не надо делать -- 2",
-    "И третий блок для теста! -- 2",
+    "Необходимо заполнить минимум 10 строк",
   ],
-  "У3": [
+  У3: [
     "Упражнение 'Значимый опыт'",
-    "Надо делать вот так -- 3",
-    "Так не надо делать -- 3",
-    "И третий блок для теста! -- 3",
+    "Необходимо заполнить минимум 10 строк",
   ],
   "Колесо баланса": [
     "Упражнение 'Колесо баланса'",
-    "Надо делать вот так -- КБ",
-    "Так не надо делать -- КБ",
-    "И третий блок для теста! -- КБ",
+    "Заполнить все строки",
+  ],
+  28: [
+    "Тест 28 - НА ВРЕМЯ!", 
+    "30 минут",
+    "зафиксируются только те ответы, которые выделены зеленым",
+    "таймер начнет мигать, если осталось меньше минуты"
   ],
 };
 
-let testsNames = []; // массив, куда функция ниже добавит необходимое количество листов, включая тесты, упражнения (+КБ и КБ результат), приветствие и прощанеи 
 
-for (let i = 0; i <= numberOfTests + numberOfExercises; i++) {
-
-  switch (i) {
-
-    case 0:
-      testsNames.push(["Введение"]);
-      break;
-
-    case numberOfTests + numberOfExercises:
-      testsNames.push([`У${i - numberOfTests}`], ["Колесо баланса"], ["Колесо: результат"], ["Заключение"]);
-      testsNames = testsNames.flat();
-      break;
-
-    default:
-      if (i <= numberOfTests) {
-        testsNames.push([String(i)]);
-      } else {
-        testsNames.push([`У${i - numberOfTests}`]);
-      }
-      break;
-  }
-}
-
-console.log(testsNames); // пока оставила, чтобы всегда была возможность отследить их до начала работы
 
 const sections = document.querySelectorAll(".section");
 const tableTest = document.querySelector(".tableTest");
@@ -86,12 +59,64 @@ const instrCloseBtn = instructionModal.querySelector(".instructionModal__btn");
 const instrTextBlock = instructionModal.querySelector(".instructionModal__text");
 const instrOpenBtn = document.querySelector(".instrBtn");
 
+const timer = document.querySelector(".timer");
+
+
+
+let testsNames = []; // массив, куда функция ниже добавит необходимое количество листов, включая тесты, упражнения (+КБ и КБ результат), приветствие и прощанеи
+
+/**
+ * Цикл наполняет массив testsNames названиеями тестов, упражнений и доп.листов
+ */
+for (let i = 0; i <= numberOfTests + numberOfExercises; i++) {
+  switch (i) {
+    case 0:
+      testsNames.push(["Введение"]);
+      break;
+
+    case numberOfTests + numberOfExercises:
+      testsNames.push(
+        [`У${i - numberOfTests}`],
+        ["Колесо баланса"],
+        ["Колесо: результат"],
+        ["Заключение"]
+      );
+      testsNames = testsNames.flat();
+      break;
+
+    default:
+      if (i <= numberOfTests) {
+        testsNames.push([String(i)]);
+      } else {
+        testsNames.push([`У${i - numberOfTests}`]);
+      }
+      break;
+  }
+}
+
+// console.log(testsNames); // пока оставила, чтобы всегда была возможность отследить их до начала работы
+
+// дефолтные значения для таймера
+const timerData = {
+  time: 1800, // общее время на тест в секундах - 30 минут
+  timerHasStarted: false, // был ли таймер уже запущен
+  isFlashing: false, // мигание времени
+  startFlashging: { // время, с которого таймер начинает мигать
+    forMinutes: "00",
+    forSeconds: "59",
+  },
+};
+
+let intervalId; // переменна для setInterval, чтобы потом можно было удалить его
+let time = timerData.time;
+let timerHasStarted = timerData.timerHasStarted;
+let isFlashing = timerData.isFlashing;
+
 /**
  * Функция переключения между блоками входа
  * @param {string} isFirstTime строка true/false открыт ли блок "В первый раз?"
  */
 function changeEnterBlock(isFirstTime) {
-
   /**
    * Проверка: открыт блок "В первый раз?"
    *    если да -> в окне добавляются блок с радиокнопками для выбора пола и инпут для возраста
@@ -137,7 +162,7 @@ function toggleTableBlock() {
 }
 
 /**
- * Функция переключения между секциями. 
+ * Функция переключения между секциями.
  * Так как их всего две, то toggle просто добавляет класс одной и добавляет другой.
  */
 function toggleSctions() {
@@ -161,9 +186,11 @@ function closeInstruction() {
   instructionModal.classList.add("instructionModal_hide");
   instrOpenBtn.classList.add("instrBtn_animation");
 
+  checkForTimer(true);
+
   setTimeout(() => {
     instructionModal.style.display = "none";
-  }, 150) // таймер ждет, пока пройден анимация ухода окна и затем полностью отключает блок
+  }, 150); // таймер ждет, пока пройден анимация ухода окна и затем полностью отключает блок
 }
 
 /**
@@ -181,12 +208,15 @@ function showInstruction() {
  * @returns boolean - ответ нужна ли инструкция
  */
 function checkForInstructions(listName) {
-
   /**
    * Проверка: передано название упражнения - У_ или "Колесо баланса"
    *    если да -> вызываются функции очистки и заполнения окна инструкции, его вызова и добавления кнопки
    */
-  if (/^У\d+/.test(listName) || listName == "Колесо баланса") {
+  if (
+    /^У\d+/.test(listName) ||
+    listName == "Колесо баланса" ||
+    listName == 28
+  ) {
     clearInstructionBlock();
     addTextToInstruction(listName);
     showInstruction();
@@ -200,7 +230,7 @@ function checkForInstructions(listName) {
 
 /**
  * Функция добавляет необходимый текст в инструкцию
- * @param {string} listName - название или номер теста или упражнения 
+ * @param {string} listName - название или номер теста или упражнения
  */
 function addTextToInstruction(listName) {
   const instructions = exerciseInstructions[listName];
@@ -212,14 +242,15 @@ function addTextToInstruction(listName) {
 
     const item = createAndInsertText(el, cl, text);
     instrTextBlock.appendChild(item);
-  })
+  });
 }
 
 /**
  * Функция очистки. Цикл проверяет есть ди в блоке 1-ый элемент и если да, то удаляет его
  */
 function clearInstructionBlock() {
-  while(instrTextBlock.firstChild) instrTextBlock.removeChild(instrTextBlock.firstChild);
+  while (instrTextBlock.firstChild)
+    instrTextBlock.removeChild(instrTextBlock.firstChild);
 }
 
 /**
@@ -237,6 +268,118 @@ function createAndInsertText(element, className, text) {
 }
 
 /**
+ * Функция проверки нужно ли показывать таймер
+ * @param {boolean} hasReadInstructions - была ли прочитана инструкция
+ */
+function checkForTimer(hasReadInstructions) {
+  const listName = sessionStorage.getItem("listName");
+  // Если это не 28 тест, таймер не нужен
+  if (listName != 28) return;
+
+  timerHasStarted = sessionStorage.getItem("timerHasStarted") != null && true;
+
+  /**
+   * Проверка: инструкция прочитана И таймер еще НЕ запущен
+   *    если да -> запускается таймер, данные записываются в sessionStorage
+   */
+  if (hasReadInstructions && !timerHasStarted) {
+    timerHasStarted = true;
+    time = timerData.time;
+
+    sessionStorage.setItem("timerHasStarted", timerHasStarted);
+    sessionStorage.setItem("time", time);
+  }
+
+  /**
+   * Проверка: логика - таймер не запускался, инструкцию не читали
+   *    если да -> время не будет отсчитываться
+   */
+  if (!(timerHasStarted || hasReadInstructions)) return;
+
+  const storageTime = sessionStorage.getItem("time", time);
+  time = isNaN(storageTime) ? time : storageTime;
+
+  timer.classList.remove("timer_hide");
+  instrOpenBtn.classList.add("instrBtn_withTimer");
+
+  timerHasStarted = true;
+  sessionStorage.setItem("timerHasStarted", timerHasStarted);
+
+  startTimer();
+}
+
+/**
+ * Функция, создающая setInterval, вложенная функция будет вызывыться каждую секунду
+ */
+function startTimer() {
+  /**
+   * Если есть значение есть, то выходим из функции, чтобы не создавать новые setInterval
+   */
+  if (intervalId != undefined) return;
+
+  intervalId = setInterval(() => {
+    updateCountdown();
+  }, 1000);
+}
+
+/**
+ * Функция обновления времени на таймере
+ */
+function updateCountdown() {
+  let minutes = Math.floor(time / 60);
+  let seconds = time % 60;
+
+  // добавляет 0 перед однозначными числами, чтобы таймер выглядел аккуратно
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+
+  timer.textContent = `${minutes}:${seconds}`;
+  time--;
+
+  sessionStorage.setItem("time", time);
+
+  /**
+   *  Проверка: минуты и секунды ниже или равны пороговым значениям для начала мигания и мигание еще не было добавлено
+   *    если да -> добавляет класс, чтобы таймер начал мигать
+   */
+  if (
+    minutes <= timerData.startFlashging.forMinutes &&
+    seconds <= timerData.startFlashging.forSeconds &&
+    !isFlashing
+  ) {
+    timer.classList.add("timer_highlight");
+    isFlashing = true;
+  }
+
+  /**
+   * Проверка: переменная time равняется -1 (на таймере показано 00:00 => тестирование должно быть прекращено)
+   *    если да -> вызываются функции очистки таймера и отправки данных на сервер
+   */
+  if (time == -1) {
+    clearTimer();
+    submitTest();
+  }
+}
+
+/**
+ * Функция очистки таймера, возвращения значений к дефолтным, удаления данных таймера из sessionStorage и setInterval
+ */
+function clearTimer() {
+  time = timerData.time;
+  timerHasStarted = timerData.timerHasStarted;
+  isFlashing = timerData.isFlashing;
+
+  sessionStorage.removeItem("timerHasStarted");
+  sessionStorage.removeItem("time");
+
+  timer.classList.add("timer_hide");
+  timer.classList.remove("timer_highlight");
+  instrOpenBtn.classList.remove("instrBtn_withTimer");
+
+  clearInterval(intervalId);
+}
+
+/**
  * Функция собирает данные и выстраивает строку запроса
  * @returns string строка запроса для GET
  */
@@ -248,7 +391,9 @@ function getData() {
   try {
     let string = "";
 
-    const isFirstTime = document.querySelector("input[name=isFirstTime]:checked").value;
+    const isFirstTime = document.querySelector(
+      "input[name=isFirstTime]:checked"
+    ).value;
     const email = emailField.value.trim();
 
     string += `isFirstTime=${isFirstTime}&email=${email}`;
@@ -265,7 +410,6 @@ function getData() {
     }
 
     return [email, string];
-
   } catch {
     showPopup("Убедитесь, что все поля заполнены.");
   }
@@ -315,20 +459,18 @@ function clearInputsAndRadioBtns() {
   });
 }
 
-
-
 /**
  * Асинхронная функция посылающая GET запрос: отправляет почту и получает данные, необходимые для тестирования (вход в тестирование)
- * @param {object} e - событие 
+ * @param {object} e - событие
  */
-async function openTests (e) {
+async function openTests(e) {
   e.preventDefault();
 
   // принудительное закрытие попапа, если он открыт
   if (popup.classList.contains("popup_show")) closePopup();
 
   const [email, studentData] = getData();
-  blockInputsAndBtns(); 
+  blockInputsAndBtns();
 
   /**
    * При успешной отправки данных открывается тестирование, необходимый данные записываются в sessionStorage
@@ -375,14 +517,17 @@ async function openTests (e) {
   } finally {
     unblockInputsAndBtns();
   }
-};
+}
 
 /**
  * Асинхронная функция посылающая POST запрос: отправляет почту и получает данные, необходимые для тестирования (переключение тестов)
- * @param {object} e - событие 
+ * @param {object} e - событие
  */
-async function submitTest (e) {
-  e.preventDefault();
+async function submitTest(e = null) {
+  if (e != null) e.preventDefault();
+
+  // если setInterval не был очищен, то принудительно очищаем перед отправкой результатов
+  if (intervalId != undefined) clearTimer();
 
   // принудительное закрытие попапа, если он открыт
   if (popup.classList.contains("popup_show")) closePopup();
@@ -440,7 +585,6 @@ async function submitTest (e) {
         instrOpenBtn.classList.remove("instrBtn_animation");
         instrOpenBtn.classList.add("instrBtn_hide");
       }
-
     } else {
       showPopup(res, true);
     }
@@ -499,6 +643,7 @@ function setData(email, listName, url) {
   setProgress();
   toggleSctions();
   checkForInstructions(listName);
+  checkForTimer(false);
 }
 
 /**
@@ -514,7 +659,7 @@ function setProgress() {
 
 /**
  * Функция определяет текст кнопки по номеру теста
- * @param {string} listName - название или номер теста или упражнения 
+ * @param {string} listName - название или номер теста или упражнения
  * @returns string текст для кнопки
  */
 function getBtnText(listName) {
@@ -543,7 +688,7 @@ function getBtnText(listName) {
 
 /**
  * Функция определяет текст кнопки в момент отправки теста по его номеру
- * @param {string} listName - название или номер теста или упражнения 
+ * @param {string} listName - название или номер теста или упражнения
  * @returns string текст для кнопки
  */
 function getBtnText_onSubmit(listName) {
@@ -566,8 +711,6 @@ function getBtnText_onSubmit(listName) {
   return btnText;
 }
 
-
-
 headerBlocks.forEach((block) => {
   block.addEventListener("click", (e) => changeEnterBlock(e.target.value));
 });
@@ -581,3 +724,7 @@ instrCloseBtn.addEventListener("click", closeInstruction);
 instrOpenBtn.addEventListener("click", showInstruction);
 
 checkSessionStorage();
+
+// console.log(
+//   `---> время ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`
+// );
